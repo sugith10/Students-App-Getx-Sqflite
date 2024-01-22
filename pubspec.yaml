@@ -1,0 +1,53 @@
+name: student_app
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.4 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  sqflite: ^2.3.0
+  lottie: ^3.0.0
+
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+
+  assets:
+    - asset/json/Animation - 1705926563972.json
+    - asset/json/Animation - 1705926987002.json
+
+
+
+
+  fonts:
+    - family: raleway
+      fonts:
+        - asset: asset/font/raleway/Raleway-Regular.ttf
+        - asset: asset/font/raleway/Raleway-Medium.ttf
+        - asset: asset/font/raleway/Raleway-Bold.ttf
+          weight: 700
+    - family: poppins
+      fonts:
+        - asset: asset/font/popins/Poppins-Medium.ttf
+        - asset: asset/font/popins/Poppins-Regular.ttf
+          
+ 
