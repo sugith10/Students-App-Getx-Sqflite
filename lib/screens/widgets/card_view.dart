@@ -17,7 +17,7 @@ class InfoWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: padding),
       child: Text(
         text,
-        style: TextStyle(fontSize: fontSize),
+        style: TextStyle(fontSize: fontSize,fontWeight: FontWeight.w400, color: const Color.fromARGB(255, 255, 255, 255)),
       ),
     );
   }

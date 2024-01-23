@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:student_app/screens/home_screen/home_screen.dart';
 import 'package:student_app/screens/splash_screen/splash_screen.dart';
 
 main(){
@@ -19,10 +18,11 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.black
         ),
         colorScheme: const ColorScheme.dark(
+          
           background: Colors.black,
           secondary: Color.fromARGB(255, 255, 255, 255)
-        )
-      
+        ),
+        fontFamily: 'poppins',
       ),
       home: const SplashScreen(),
     );

@@ -34,8 +34,7 @@ flutter:
   assets:
     - asset/json/Animation - 1705926563972.json
     - asset/json/Animation - 1705926987002.json
-
-
+    - asset/img/hero.png
 
 
   fonts:
