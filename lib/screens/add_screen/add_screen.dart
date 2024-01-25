@@ -62,7 +62,7 @@ class AddStudentScreen extends StatelessWidget {
               height: 20,
             ),
             StudentInputField(
-                textController: studentMobile, hintText: 'Mobile No'),
+                textController: studentMobile, hintText: 'Mobile No', textInputType: TextInputType.number),
             const SizedBox(
               height: 40,
             ),
