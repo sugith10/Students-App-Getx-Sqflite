@@ -49,7 +49,15 @@ class ViewStudentDataScrn extends StatelessWidget {
           ),
         ),
       ),
-      
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 47, 47, 50),
+        onPressed: () {
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 }

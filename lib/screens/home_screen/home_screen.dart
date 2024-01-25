@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/add_screen_navigation.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/view_student_data_screen.dart';
-import 'package:student_app/screens/view_student_screen/view_student_scrn.dart';
 import 'package:student_app/screens/widgets/card_view.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  final String name =
-      'https://media.licdn.com/dms/image/D5603AQHL6xrN6LW9dA/profile-displayphoto-shrink_200_200/0/1696985633177?e=2147483647&v=beta&t=faFj8AwSXIHUyO74pF7DJYrq_uYXQkHgNn88cJgvHlg';
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: const [
           Icon(
-            Icons.nightlight_round,
+            Icons.search_rounded,
             color: Color.fromARGB(255, 114, 143, 170),
           ),
           SizedBox(
@@ -41,8 +39,8 @@ class HomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: const Color(0xFF1C1C1E),
                     border: Border.all(
-                      color: Colors.black, // Set the border color
-                      width: 2.0, // Set the border width
+                      color: Colors.black,
+                      width: 2.0, 
                     ),
                     borderRadius: BorderRadius.circular(10)),
                 height: 100,
