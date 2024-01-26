@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/add_screen_navigation.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/view_student_data_screen.dart';
-import 'package:student_app/screens/search_screen/search_screen.dart';
-import 'package:student_app/screens/widgets/card_view.dart';
-import 'package:student_app/screens/widgets/select_category.dart';
+import 'package:student_app/view/search_screen/search_screen.dart';
+import 'package:student_app/view/widgets/card_view.dart';
+import 'package:student_app/view/widgets/select_category.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
