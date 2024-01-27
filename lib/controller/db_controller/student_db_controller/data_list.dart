@@ -6,7 +6,7 @@ import 'package:student_app/model/db_student_model.dart';
 class StudentDataList extends GetxController {
 
  RxList<StudentModel> studentModelList = <StudentModel>[].obs;
-  
+ 
  void addData(
     String studentName,
     String studentClass,
@@ -30,6 +30,3 @@ class StudentDataList extends GetxController {
     studentModelList.removeAt(index);
   }
 }
-
-
-

@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
+import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/search_screen/search_screen.dart';
+import 'package:student_app/view/screen/view_student_screen/view_student_scrn.dart';
 import 'package:student_app/view/widgets/card_view.dart';
 import 'package:student_app/view/widgets/select_category.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final StudentDataList controller = Get.put(StudentDataList());
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: GetX<StudentDataList>(
-              init: StudentDataList(), // Initialize the controller
+              init: StudentDataList(), 
               builder: (controller) {
                 return ListView.builder(
                   itemCount: controller.studentModelList.length,
@@ -47,8 +51,7 @@ class HomeScreen extends StatelessWidget {
                     final studentModel = controller.studentModelList[index];
                     return ListTileWidget(
                       index: index,
-                      studentName: studentModel.name,
-                      studentClass: studentModel.className,
+                     studentModel: studentModel ,
                     );
                   },
                 );
@@ -72,15 +75,15 @@ class HomeScreen extends StatelessWidget {
 }
 
 class ListTileWidget extends StatelessWidget {
-  final String studentName;
-  final String studentClass;
+  final StudentModel studentModel;
+ 
   final int index;
 
   const ListTileWidget({
     Key? key,
+    required this.studentModel,
     required this.index,
-    required this.studentName,
-    required this.studentClass,
+    
   }) : super(key: key);
 
   @override
@@ -91,11 +94,11 @@ class ListTileWidget extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: doNothing(),
-            backgroundColor: Color(0xFFFE4A49),
+            backgroundColor: Color.fromARGB(255, 244, 69, 69),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(10),
               topRight: Radius.circular(10),
             ),
@@ -107,10 +110,10 @@ class ListTileWidget extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: doNothing(),
-            backgroundColor: Color(0xFFFE4A49),
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
+            backgroundColor: Color.fromARGB(255, 1, 213, 75),
+            foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+            icon: Icons.edit_document,
+            label: 'Edit',
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(10),
               topLeft: Radius.circular(10),
@@ -118,7 +121,7 @@ class ListTileWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: StudentCard(studentName: studentName, studentClass: studentClass),
+      child: StudentCard(studentModel: studentModel),
     );
   }
 }
@@ -130,21 +133,21 @@ removeData(BuildContext context, int index) {
 doNothing() {}
 
 class StudentCard extends StatelessWidget {
+  final StudentModel studentModel;
   const StudentCard({
     super.key,
-    required this.studentName,
-    required this.studentClass,
+    required this.studentModel,
+   
   });
-
-  final String studentName;
-  final String studentClass;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          Get.to(ViewStudentDataScrn(studentModel: studentModel,));
+        },
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF1C1C1E),
@@ -162,12 +165,12 @@ class StudentCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InfoWidget(
-                    text: studentName,
+                    text: studentModel.name,
                     fontSize: 20,
                     padding: 10,
                   ),
                   InfoWidget(
-                    text: studentClass,
+                    text: studentModel.className,
                     fontSize: 20,
                     padding: 10,
                   ),

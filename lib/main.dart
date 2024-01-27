@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         ),
         GetPage(
           name: '/home',
-          page: () => const HomeScreen(),
+          page: () => HomeScreen(),
             transition: Transition.native,
         ),
         GetPage(

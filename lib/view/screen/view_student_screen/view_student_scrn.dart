@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:student_app/model/db_student_model.dart';
+import 'package:student_app/view/screen/add_screen/add_screen.dart';
 import 'package:student_app/view/screen/view_student_screen/widget/details_text_widget.dart';
 
 class ViewStudentDataScrn extends StatelessWidget {
-  const ViewStudentDataScrn({super.key});
+  final StudentModel studentModel;
+  const ViewStudentDataScrn({required this.studentModel, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +36,19 @@ class ViewStudentDataScrn extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-              const DetailsTextWidget(head: 'Student Name' , body: 'Sugith',),
+               DetailsTextWidget(head: 'Student Name' , body: studentModel.name,),
               const SizedBox(
                 height: 20,
               ),
-               const DetailsTextWidget(head: 'Student Class', body: 'Plus Two',),
+                DetailsTextWidget(head: 'Student Class', body: studentModel.className,),
                   const SizedBox(
                 height: 20,
               ),
-               const DetailsTextWidget(head: 'Parent Name', body: 'Plus Two',),
+               DetailsTextWidget(head: 'Parent Name', body: studentModel.father,),
                 const SizedBox(
                 height: 20,
               ),
-               const DetailsTextWidget(head: 'Student Mobile No', body: '1234567891',),
+               DetailsTextWidget(head: 'Student Mobile No', body: studentModel.pNumber,),
             ],
           ),
         ),
@@ -52,9 +56,10 @@ class ViewStudentDataScrn extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color.fromARGB(255, 47, 47, 50),
         onPressed: () {
+          Get.to(AddStudentScreen(isEdit: true,studentModel: studentModel,));
         },
         child: const Icon(
-          Icons.add,
+          Icons.edit_document,
           color: Colors.white,
         ),
       ),
