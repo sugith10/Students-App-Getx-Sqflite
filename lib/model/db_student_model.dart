@@ -1,17 +1,17 @@
 class StudentModel {
   int? id;
   final String name;
-  final String classname;
+  final String className;
   final String father;
-  final String pnumber;
+  final String pNumber;
   final String imagex;
-
+ 
   StudentModel(
       {this.id,
       required this.name,
-      required this.classname,
+      required this.className,
       required this.father,
-      required this.pnumber,
+      required this.pNumber,
       required this.imagex});
 
   static StudentModel fromMap(Map<String, Object?> map) {
@@ -24,9 +24,9 @@ class StudentModel {
     return StudentModel(
         id: id,
         name: name,
-        classname: classname,
+        className: classname,
         father: father,
-        pnumber: pnumber,
+        pNumber: pnumber,
         imagex: imagex);
   }
 }

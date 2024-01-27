@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:student_app/view/home_screen/home_screen.dart';
+import 'package:student_app/view/screen/home_screen/home_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -11,23 +11,14 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Timer(const Duration(seconds: 2), () {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+          context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     });
     return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF2C3E50), // Midnight blue
-            Color(0xFF34495E), // Dark slate gray
-          ],
-        ),
-      ),
-      child: Center(
-          child: Lottie.asset('asset/json/Animation - 1705926987002.json')),
-    ));
+        body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(80.0),
+              child: Lottie.asset('asset/json/Animation - 1705926987002.json'),
+            )));
   }
 }
 

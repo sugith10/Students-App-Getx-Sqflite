@@ -1,8 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student_app/view/add_screen/widget/inputfield_widget.dart';
-import 'package:student_app/view/add_screen/widget/submit_button_widget.dart';
+import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
+import 'package:student_app/model/db_student_model.dart';
+import 'package:student_app/view/screen/add_screen/widget/inputfield_widget.dart';
+import 'package:student_app/view/screen/add_screen/widget/submit_button_widget.dart';
 
 class AddStudentScreen extends StatefulWidget {
   AddStudentScreen({super.key});
@@ -16,7 +19,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   final TextEditingController studentClass = TextEditingController();
   final TextEditingController studentGuardian = TextEditingController();
   final TextEditingController studentMobile = TextEditingController();
-
+  StudentDataCntrl studentDataCntrl = StudentDataCntrl();
   File? image25;
   String? imagepath;
 
@@ -92,6 +95,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
             ),
             // Spacer(),
             SubmitButton(onTap: () {
+              print('insert function started');
+              addStudent(stduentName: studentName, studentClass: studentClass, studentGuardian: studentGuardian, studentMobile: studentMobile );
+              print('insert function ended');
               print(studentName.text);
               print(studentGuardian);
             }),
@@ -114,34 +120,42 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
         studentMobile.text.isEmpty) {
       return true;
     }
+    imagepath ??= 'empty'; 
     return false;
   }
 
-  Future<void> addStudent({
+  addStudent({
     required TextEditingController stduentName,
     required TextEditingController studentClass,
     required TextEditingController studentGuardian,
     required TextEditingController studentMobile,
   }) async {
+    bool empty = checkFieldsEmpty(
+      stduentName: stduentName,
+      studentClass: studentClass,
+      studentGuardian: studentGuardian,
+      studentMobile: studentMobile,
+    );
+
+    if (empty == true) {
+      log('empty');
+      return;
+    }
+
+    final name = stduentName.text.toUpperCase();
+    final className = studentClass.text.toString().trim();
+    final father = studentGuardian.text;
+    final pNumber = studentMobile.text.trim();
+
+
+    final StudentModel studentModel = StudentModel(name: name, className: className, father: father, pNumber: pNumber, imagex: imagepath!);
   
-  bool empty =   checkFieldsEmpty(
-        stduentName: stduentName,
-        studentClass: studentClass,
-        studentGuardian: studentGuardian,
-        studentMobile: studentMobile);
+    print('come to post function');
+  //  studentDataCntrl.post(studentModel);
+    print('come out of end screen');
 
-  if(empty == true){
-    print('empty');
-    return;
-  }
-  
-   final name = stduentName.text.toUpperCase();
-   final standard = studentClass.text.toString().trim();
-   final father = studentGuardian.text;
-   final phoneNumber = studentMobile.text.trim();
 
-   
-
+    
   }
 
   Future<void> getimage(ImageSource source) async {
@@ -155,10 +169,10 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     });
   }
 
-  void addphoto(ctxr) {
+  void addphoto(BuildContext ctx) {
     showDialog(
-      context: ctxr,
-      builder: (ctxr) {
+      context: ctx,
+      builder: (ctx) {
         return AlertDialog(
           content: const Text('Choose Image From.......'),
           actions: [

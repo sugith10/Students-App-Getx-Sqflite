@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:student_app/view/view_student_screen/widget/details_text_widget.dart';
+import 'package:student_app/view/screen/view_student_screen/widget/details_text_widget.dart';
 
 class ViewStudentDataScrn extends StatelessWidget {
   const ViewStudentDataScrn({super.key});
