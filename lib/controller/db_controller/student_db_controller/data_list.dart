@@ -1,8 +1,11 @@
+import 'package:get/get.dart';
 import 'package:student_app/model/db_student_model.dart';
 
-List<StudentModel> studentModelList = [];
 
-class StudentDataList {
+
+class StudentDataList extends GetxController {
+
+ RxList<StudentModel> studentModelList = <StudentModel>[].obs;
   
  void addData(
     String studentName,
@@ -20,6 +23,11 @@ class StudentDataList {
     );
    studentModelList.add(studentModel);
    print(studentModelList.length);
+    Get.toNamed('/home', arguments: studentModel);
+  }
+
+  void removeData(int index) {
+    studentModelList.removeAt(index);
   }
 }
 

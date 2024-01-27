@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
-import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/add_screen_navigation.dart';
-import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/view_student_data_screen.dart';
 import 'package:student_app/view/screen/search_screen/search_screen.dart';
 import 'package:student_app/view/widgets/card_view.dart';
 import 'package:student_app/view/widgets/select_category.dart';
@@ -12,18 +12,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: const Color.fromARGB(255, 108, 108, 108),
       appBar: AppBar(
-    //  backgroundColor: const Color.fromARGB(255, 108, 108, 108),
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Students Data',
-          style: TextStyle(fontFamily: 'poppins'),
-        ),
+        title: const Text('Students Data'),
         actions: [
-         IconButton(onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> SearchScreen()));
-         }, icon: Icon(Icons.search_rounded))
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.search_rounded),
+          ),
         ],
       ),
       body: Column(
@@ -34,14 +37,20 @@ class HomeScreen extends StatelessWidget {
               child: SelectCategoryWidget(),
             ),
           ),
-            Expanded(
-            child: ListView.builder(
-              itemCount: studentModelList.length,
-              itemBuilder: (context, index) {
-                final studentModel = studentModelList[index];
-                return ListTileWidget(
-                  studentName: studentModel.name,
-                  studentClass: studentModel.className,
+          Expanded(
+            child: GetX<StudentDataList>(
+              init: StudentDataList(), // Initialize the controller
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount: controller.studentModelList.length,
+                  itemBuilder: (context, index) {
+                    final studentModel = controller.studentModelList[index];
+                    return ListTileWidget(
+                      index: index,
+                      studentName: studentModel.name,
+                      studentClass: studentModel.className,
+                    );
+                  },
                 );
               },
             ),
@@ -49,9 +58,9 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 47, 47, 50),
+        backgroundColor: const Color.fromARGB(255, 47, 47, 50),
         onPressed: () {
-          AddScreenNavigation().toAddScreenLeftToRight(context);
+          Get.toNamed('/addStudent');
         },
         child: const Icon(
           Icons.add,
@@ -65,21 +74,77 @@ class HomeScreen extends StatelessWidget {
 class ListTileWidget extends StatelessWidget {
   final String studentName;
   final String studentClass;
+  final int index;
 
   const ListTileWidget({
     Key? key,
+    required this.index,
     required this.studentName,
     required this.studentClass,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return Slidable(
+      startActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: doNothing(),
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+          ),
+        ],
+      ),
+      endActionPane: ActionPane(
+        motion: ScrollMotion(),
+        children: [
+          SlidableAction(
+            onPressed: doNothing(),
+            backgroundColor: Color(0xFFFE4A49),
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              topLeft: Radius.circular(10),
+            ),
+          ),
+        ],
+      ),
+      child: StudentCard(studentName: studentName, studentClass: studentClass),
+    );
+  }
+}
+
+removeData(BuildContext context, int index) {
+  // studentModelList.removeAt(index);
+}
+
+doNothing() {}
+
+class StudentCard extends StatelessWidget {
+  const StudentCard({
+    super.key,
+    required this.studentName,
+    required this.studentClass,
+  });
+
+  final String studentName;
+  final String studentClass;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: GestureDetector(
-        onTap: () {
-          // Handle the onTap action if needed
-        },
+        onTap: () {},
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFF1C1C1E),
@@ -92,7 +157,7 @@ class ListTileWidget extends StatelessWidget {
           height: 100,
           child: Row(
             children: [
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

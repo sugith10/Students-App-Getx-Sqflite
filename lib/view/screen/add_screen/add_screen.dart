@@ -8,23 +8,23 @@ import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/add_screen/widget/inputfield_widget.dart';
 import 'package:student_app/view/screen/add_screen/widget/submit_button_widget.dart';
 
-class AddStudentScreen extends StatefulWidget {
-  const AddStudentScreen({super.key});
+class AddStudentScreen extends StatelessWidget {
+ AddStudentScreen({super.key});
 
-  @override
-  State<AddStudentScreen> createState() => _AddStudentScreenState();
-}
-
-class _AddStudentScreenState extends State<AddStudentScreen> {
   final TextEditingController studentName = TextEditingController();
-  final TextEditingController studentClass = TextEditingController();
-  final TextEditingController studentGuardian = TextEditingController();
-  final TextEditingController studentMobile = TextEditingController();
-  StudentDataCntrl studentDataCntrl = StudentDataCntrl();
-  StudentDataList studnetDataList = StudentDataList();
 
+  final TextEditingController studentClass = TextEditingController();
+
+  final TextEditingController studentGuardian = TextEditingController();
+
+  final TextEditingController studentMobile = TextEditingController();
+
+  final StudentDataCntrl studentDataCntrl = StudentDataCntrl();
+
+  final StudentDataList studnetDataList = StudentDataList();
 
   File? image25;
+
   String? imagepath;
 
   @override
@@ -114,8 +114,4 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
       ),
     );
   }
-
-  
-
-
 }
