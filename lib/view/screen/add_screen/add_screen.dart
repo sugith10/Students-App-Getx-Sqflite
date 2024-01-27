@@ -2,13 +2,14 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/add_screen/widget/inputfield_widget.dart';
 import 'package:student_app/view/screen/add_screen/widget/submit_button_widget.dart';
 
 class AddStudentScreen extends StatefulWidget {
-  AddStudentScreen({super.key});
+  const AddStudentScreen({super.key});
 
   @override
   State<AddStudentScreen> createState() => _AddStudentScreenState();
@@ -20,6 +21,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   final TextEditingController studentGuardian = TextEditingController();
   final TextEditingController studentMobile = TextEditingController();
   StudentDataCntrl studentDataCntrl = StudentDataCntrl();
+  StudentDataList studnetDataList = StudentDataList();
+
+
   File? image25;
   String? imagepath;
 
@@ -41,7 +45,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
             ),
             InkWell(
               onTap: () {
-                addphoto(context);
+                // addphoto(context);
               },
               customBorder: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
@@ -96,10 +100,13 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
             // Spacer(),
             SubmitButton(onTap: () {
               print('insert function started');
-              addStudent(stduentName: studentName, studentClass: studentClass, studentGuardian: studentGuardian, studentMobile: studentMobile );
+           
+              String photo = 'nothing';
+              studnetDataList.addData(studentName.text, studentClass.text,
+                  studentGuardian.text, studentMobile.text, photo);
+
               print('insert function ended');
-              print(studentName.text);
-              print(studentGuardian);
+            
             }),
             // Spacer()
           ],
@@ -108,97 +115,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     );
   }
 
-  bool checkFieldsEmpty({
-    required TextEditingController stduentName,
-    required TextEditingController studentClass,
-    required TextEditingController studentGuardian,
-    required TextEditingController studentMobile,
-  }) {
-    if (studentName.text.isEmpty &&
-        studentClass.text.isEmpty &&
-        studentGuardian.text.isEmpty &&
-        studentMobile.text.isEmpty) {
-      return true;
-    }
-    imagepath ??= 'empty'; 
-    return false;
-  }
-
-  addStudent({
-    required TextEditingController stduentName,
-    required TextEditingController studentClass,
-    required TextEditingController studentGuardian,
-    required TextEditingController studentMobile,
-  }) async {
-    bool empty = checkFieldsEmpty(
-      stduentName: stduentName,
-      studentClass: studentClass,
-      studentGuardian: studentGuardian,
-      studentMobile: studentMobile,
-    );
-
-    if (empty == true) {
-      log('empty');
-      return;
-    }
-
-    final name = stduentName.text.toUpperCase();
-    final className = studentClass.text.toString().trim();
-    final father = studentGuardian.text;
-    final pNumber = studentMobile.text.trim();
-
-
-    final StudentModel studentModel = StudentModel(name: name, className: className, father: father, pNumber: pNumber, imagex: imagepath!);
   
-    print('come to post function');
-  //  studentDataCntrl.post(studentModel);
-    print('come out of end screen');
 
 
-    
-  }
-
-  Future<void> getimage(ImageSource source) async {
-    final image = await ImagePicker().pickImage(source: source);
-    if (image == null) {
-      return;
-    }
-    setState(() {
-      image25 = File(image.path);
-      imagepath = image.path.toString();
-    });
-  }
-
-  void addphoto(BuildContext ctx) {
-    showDialog(
-      context: ctx,
-      builder: (ctx) {
-        return AlertDialog(
-          content: const Text('Choose Image From.......'),
-          actions: [
-            IconButton(
-              onPressed: () {
-                getimage(ImageSource.camera);
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.camera_alt_rounded,
-                color: Colors.red,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                getimage(ImageSource.gallery);
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.image,
-                color: Colors.red,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

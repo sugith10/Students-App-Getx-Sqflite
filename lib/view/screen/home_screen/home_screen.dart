@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/add_screen_navigation.dart';
 import 'package:student_app/controller/screen_controller/navigation_controller/screen_navigations/view_student_data_screen.dart';
 import 'package:student_app/view/screen/search_screen/search_screen.dart';
@@ -33,53 +34,16 @@ class HomeScreen extends StatelessWidget {
               child: SelectCategoryWidget(),
             ),
           ),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: GestureDetector(
-                    onTap: () => ViewStudentDataScrnNav()
-                        .toViewStudentDataLeftToRight(context),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1C1C1E),
-                        border: Border.all(
-                          color: Colors.black,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      height: 100,
-                      child: const Row(
-                        children: [
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InfoWidget(
-                                text: 'Sugith K',
-                                fontSize: 20,
-                                padding: 10,
-                              ),
-                              InfoWidget(
-                                text: '10',
-                                fontSize: 20,
-                                padding: 10,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                )
-              ],
+            Expanded(
+            child: ListView.builder(
+              itemCount: studentModelList.length,
+              itemBuilder: (context, index) {
+                final studentModel = studentModelList[index];
+                return ListTileWidget(
+                  studentName: studentModel.name,
+                  studentClass: studentModel.className,
+                );
+              },
             ),
           ),
         ],
@@ -92,6 +56,60 @@ class HomeScreen extends StatelessWidget {
         child: const Icon(
           Icons.add,
           color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class ListTileWidget extends StatelessWidget {
+  final String studentName;
+  final String studentClass;
+
+  const ListTileWidget({
+    Key? key,
+    required this.studentName,
+    required this.studentClass,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: GestureDetector(
+        onTap: () {
+          // Handle the onTap action if needed
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF1C1C1E),
+            border: Border.all(
+              color: Colors.black,
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          height: 100,
+          child: Row(
+            children: [
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InfoWidget(
+                    text: studentName,
+                    fontSize: 20,
+                    padding: 10,
+                  ),
+                  InfoWidget(
+                    text: studentClass,
+                    fontSize: 20,
+                    padding: 10,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
