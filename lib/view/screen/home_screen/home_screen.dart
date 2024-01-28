@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
+import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/search_screen/search_screen.dart';
 import 'package:student_app/view/screen/view_student_screen/view_student_scrn.dart';
@@ -11,7 +14,7 @@ import 'package:student_app/view/widgets/select_category.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final StudentDataList controller = Get.put(StudentDataList());
+  final StudentListModel controller = Get.put(StudentListModel());
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +45,12 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GetX<StudentDataList>(
-              init: StudentDataList(), 
+            child: GetX<StudentListModel>(
+            
+              init: controller, 
               builder: (controller) {
                 return ListView.builder(
+                  
                   itemCount: controller.studentModelList.length,
                   itemBuilder: (context, index) {
                     final studentModel = controller.studentModelList[index];
@@ -64,6 +69,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 47, 47, 50),
         onPressed: () {
           Get.toNamed('/addStudent');
+          log('Data in the list ${controller.studentModelList.length}' );
         },
         child: const Icon(
           Icons.add,
@@ -90,11 +96,11 @@ class ListTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
       startActionPane: ActionPane(
-        motion: ScrollMotion(),
+        motion: const ScrollMotion(),
         children: [
           SlidableAction(
             onPressed: doNothing(),
-            backgroundColor: Color.fromARGB(255, 244, 69, 69),
+            backgroundColor: const Color.fromARGB(255, 244, 69, 69),
             foregroundColor: Colors.white,
             icon: Icons.delete,
             label: 'Delete',
@@ -106,15 +112,15 @@ class ListTileWidget extends StatelessWidget {
         ],
       ),
       endActionPane: ActionPane(
-        motion: ScrollMotion(),
+        motion: const ScrollMotion(),
         children: [
           SlidableAction(
             onPressed: doNothing(),
-            backgroundColor: Color.fromARGB(255, 1, 213, 75),
+            backgroundColor: const Color.fromARGB(255, 1, 213, 75),
             foregroundColor: const Color.fromARGB(255, 0, 0, 0),
             icon: Icons.edit_document,
             label: 'Edit',
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(10),
               topLeft: Radius.circular(10),
             ),

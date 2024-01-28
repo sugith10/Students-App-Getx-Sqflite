@@ -9,7 +9,7 @@ class SearchScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(onPressed: (){
           Navigator.pop(context);
-        }, icon: Icon(Icons.arrow_back_ios_new_rounded)),
+        }, icon: const Icon(Icons.arrow_back_ios_new_rounded)),
       ),
     );
   }

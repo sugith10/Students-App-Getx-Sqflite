@@ -1,13 +1,17 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:student_app/controller/db_controller/db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
 
-ValueNotifier<List<StudentModel>> studentList = ValueNotifier([]);
+class StudentListModel extends GetxController {
+  RxList<StudentModel> studentModelList = <StudentModel>[].obs;
+}
 
 class StudentDataCntrl extends DataBaseController {
   late Database _db;
+  final StudentListModel studentListModel = StudentListModel();
 
   StudentDataCntrl() {
     initializeDatabase();
@@ -37,13 +41,10 @@ class StudentDataCntrl extends DataBaseController {
     // TODO: implement post
 
     try {
-      if (_db == null) {
-        await initializeDatabase();
-      }
       await _db.rawInsert(
           'INSERT INTO student(name,classname,father,pnumber,imagex) VALUES(?,?,?,?,?)',
           [data.name, data.className, data.father, data.pNumber, data.imagex]);
-      
+
       await get();
     } catch (e) {
       log('Error inserting data: $e');
@@ -53,14 +54,15 @@ class StudentDataCntrl extends DataBaseController {
   @override
   Future<void> get() async {
     // TODO: implement get
-    final result = await _db!.rawQuery("SELECT * FROM student");
+    final result = await _db.rawQuery("SELECT * FROM student");
     log('All Students data : $result');
-    studentList.value.clear();
-    for (var map in result) {
-      final student = StudentModel.fromMap(map);
-      studentList.value.add(student);
-    }
-     studentList.notifyListeners();
+
+    // for (var map in result) {
+    //   final student = StudentModel.fromMap(map);
+    //   _studentListModel.studentModelList.add(student);
+    // }
+    studentListModel.studentModelList
+        .assignAll(result.map((map) => StudentModel.fromMap(map)).toList());
   }
 
   Future<void> editStudent(
@@ -85,12 +87,12 @@ class StudentDataCntrl extends DataBaseController {
   @override
   Future<void> put(int id, Map<String, dynamic> updateData) async {
     // TODO: implement put
-    await _db!.update('student', updateData, where: 'id=?', whereArgs: [id]);
+    await _db.update('student', updateData, where: 'id=?', whereArgs: [id]);
   }
 
   @override
   Future<void> delete(String id) async {
     // TODO: implement delete
-    await _db!.delete('student', where: 'id=?', whereArgs: [id]);
+    await _db.delete('student', where: 'id=?', whereArgs: [id]);
   }
 }

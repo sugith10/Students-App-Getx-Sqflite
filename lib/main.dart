@@ -7,7 +7,7 @@ import 'package:student_app/view/screen/splash_screen/splash_screen.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await StudentDataCntrl().initializeDatabase();
+  await StudentDataCntrl().initializeDatabase();
   runApp(const MyApp());
 }
 

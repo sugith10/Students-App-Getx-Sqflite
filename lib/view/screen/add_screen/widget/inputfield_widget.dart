@@ -18,7 +18,7 @@ class StudentInputField extends StatelessWidget {
       child: TextField(
         controller: textController,
         obscureText: false,
-        cursorColor: Color.fromARGB(255, 216, 216, 216),
+        cursorColor: const Color.fromARGB(255, 216, 216, 216),
         decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
                 borderSide:

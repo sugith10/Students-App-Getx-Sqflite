@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
@@ -34,13 +32,13 @@ class AddStudentScreen extends StatelessWidget {
 
   final TextEditingController studentMobile = TextEditingController();
 
-  // final StudentDataCntrl studentDataCntrl = StudentDataCntrl();
+  final StudentDataCntrl studentDataCntrl = StudentDataCntrl();
 
   File? image25;
 
   String? imagepath;
 
-  final StudentDataList studentDataListController = Get.find<StudentDataList>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,12 +116,15 @@ class AddStudentScreen extends StatelessWidget {
 
               String photo = 'nothing';
 
-              studentDataListController.addData(
-                  studentName.text,
-                  studentClass.text,
-                  studentGuardian.text,
-                  studentMobile.text,
-                  photo);
+              // studentDataListController.addData(
+              //     studentName.text,
+              //     studentClass.text,
+              //     studentGuardian.text,
+              //     studentMobile.text,
+              //     photo);
+
+              studentDataCntrl.post(StudentModel(name: studentName.text, 
+              className: studentClass.text, father: studentGuardian.text, pNumber: studentMobile.text, imagex: photo));
               print('insert function ended');
             }),
             // Spacer()

@@ -54,7 +54,7 @@ class ViewStudentDataScrn extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 47, 47, 50),
+        backgroundColor: const Color.fromARGB(255, 47, 47, 50),
         onPressed: () {
           Get.to(AddStudentScreen(isEdit: true,studentModel: studentModel,));
         },
