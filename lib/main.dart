@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
             secondary: Color.fromARGB(255, 255, 255, 255)),
         fontFamily: 'poppins',
       ),
+
       initialRoute: '/',
       defaultTransition: Transition.leftToRight,
       getPages: [
@@ -49,3 +50,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+

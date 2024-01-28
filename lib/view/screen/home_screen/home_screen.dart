@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -14,7 +13,7 @@ import 'package:student_app/view/widgets/select_category.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final StudentListModel controller = Get.put(StudentListModel());
+    StudentDataCntrl controller = Get.put(StudentDataCntrl());
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +44,27 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: GetX<StudentListModel>(
-            
-              init: controller, 
-              builder: (controller) {
-                return ListView.builder(
-                  
-                  itemCount: controller.studentModelList.length,
-                  itemBuilder: (context, index) {
-                    final studentModel = controller.studentModelList[index];
-                    return ListTileWidget(
-                      index: index,
-                     studentModel: studentModel ,
+            child: FutureBuilder(
+              future: controller.get(), 
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  return Obx(() {
+                    return ListView.builder(
+                      itemCount: controller.studentModelList.length,
+                      itemBuilder: (context, index) {
+                        final studentModel = controller.studentModelList[index];
+                        return ListTileWidget(
+                          index: index,
+                          studentModel: studentModel,
+                        );
+                      },
                     );
-                  },
-                );
+                  });
+                }
               },
             ),
           ),
@@ -79,6 +84,24 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class ListTileWidget extends StatelessWidget {
   final StudentModel studentModel;
@@ -149,7 +172,7 @@ class StudentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: GestureDetector(
         onTap: () {
           Get.to(ViewStudentDataScrn(studentModel: studentModel,));

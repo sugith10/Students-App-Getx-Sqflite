@@ -5,23 +5,26 @@ import 'package:sqflite/sqflite.dart';
 import 'package:student_app/controller/db_controller/db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
 
-class StudentListModel extends GetxController {
-  RxList<StudentModel> studentModelList = <StudentModel>[].obs;
-}
 
-class StudentDataCntrl extends DataBaseController {
-  late Database _db;
-  final StudentListModel studentListModel = StudentListModel();
+
+class StudentDataCntrl extends GetxController {
+  late Database? _db;
+  RxList<StudentModel> studentModelList = <StudentModel>[].obs;
+   bool isDbInitialized = false;
 
   StudentDataCntrl() {
     initializeDatabase();
+    update();
   }
 
   Future<void> initializeDatabase() async {
-    await openDB();
+   if (!isDbInitialized) {
+      await openDB();
+      isDbInitialized = true;
+    }
   }
 
-  @override
+ 
   Future<void> openDB() async {
     // TODO: implement openDB
     _db = await openDatabase(
@@ -36,12 +39,12 @@ class StudentDataCntrl extends DataBaseController {
     log('Database created successfully.');
   }
 
-  @override
+
   Future<void> post(covariant StudentModel data) async {
     // TODO: implement post
 
     try {
-      await _db.rawInsert(
+      await _db!.rawInsert(
           'INSERT INTO student(name,classname,father,pnumber,imagex) VALUES(?,?,?,?,?)',
           [data.name, data.className, data.father, data.pNumber, data.imagex]);
 
@@ -49,20 +52,24 @@ class StudentDataCntrl extends DataBaseController {
     } catch (e) {
       log('Error inserting data: $e');
     }
+     update();
+     Get.toNamed('/home');
   }
 
-  @override
+
   Future<void> get() async {
-    // TODO: implement get
-    final result = await _db.rawQuery("SELECT * FROM student");
+    await initializeDatabase();
+ 
+    final result = await _db!.rawQuery("SELECT * FROM student");
     log('All Students data : $result');
 
-    // for (var map in result) {
-    //   final student = StudentModel.fromMap(map);
-    //   _studentListModel.studentModelList.add(student);
-    // }
-    studentListModel.studentModelList
-        .assignAll(result.map((map) => StudentModel.fromMap(map)).toList());
+    for (var map in result) {
+      final student = StudentModel.fromMap(map);
+      studentModelList.add(student);
+    }
+
+      log('length: ${studentModelList.length}' );
+       update();
   }
 
   Future<void> editStudent(
@@ -84,15 +91,14 @@ class StudentDataCntrl extends DataBaseController {
     await put(id, updateData);
   }
 
-  @override
+
   Future<void> put(int id, Map<String, dynamic> updateData) async {
     // TODO: implement put
-    await _db.update('student', updateData, where: 'id=?', whereArgs: [id]);
+    await _db!.update('student', updateData, where: 'id=?', whereArgs: [id]);
   }
 
-  @override
   Future<void> delete(String id) async {
     // TODO: implement delete
-    await _db.delete('student', where: 'id=?', whereArgs: [id]);
+    await _db!.delete('student', where: 'id=?', whereArgs: [id]);
   }
 }
