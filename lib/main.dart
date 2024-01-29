@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       ),
 
       initialRoute: '/',
-      defaultTransition: Transition.leftToRight,
+      defaultTransition: Transition.native,
       getPages: [
         GetPage(
           name: '/',

@@ -2,8 +2,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
+import 'package:student_app/controller/getx_controller/view_switch_get_cntrl.dart';
 import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/search_screen/search_screen.dart';
 import 'package:student_app/view/screen/view_student_screen/view_student_scrn.dart';
@@ -13,7 +13,11 @@ import 'package:student_app/view/widgets/select_category.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-    StudentDataCntrl controller = Get.put(StudentDataCntrl());
+  StudentDataCntrl controller = Get.put(
+    StudentDataCntrl(),
+  );
+
+  ViewControl viewControl = Get.put(ViewControl());
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +28,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SearchScreen(),
-                ),
-              );
+              Get.to(const SearchScreen());
             },
             icon: const Icon(Icons.search_rounded),
           ),
@@ -37,7 +36,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const SizedBox(
+          SizedBox(
             height: 80,
             child: Center(
               child: SelectCategoryWidget(),
@@ -45,7 +44,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: FutureBuilder(
-              future: controller.get(), 
+              future: controller.get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -53,16 +52,30 @@ class HomeScreen extends StatelessWidget {
                   return Center(child: Text('Error: ${snapshot.error}'));
                 } else {
                   return Obx(() {
-                    return ListView.builder(
-                      itemCount: controller.studentModelList.length,
-                      itemBuilder: (context, index) {
-                        final studentModel = controller.studentModelList[index];
-                        return ListTileWidget(
-                          index: index,
-                          studentModel: studentModel,
-                        );
-                      },
-                    );
+                    return viewControl.view.isFalse
+                        ? ListView.builder(
+                            itemCount: controller.studentModelList.length,
+                            itemBuilder: (context, index) {
+                              final studentModel =
+                                  controller.studentModelList[index];
+                              return ListTileWidget(
+                                studentModel: studentModel,
+                                controller: controller,
+                              );
+                            },
+                          )
+                        : GridView.builder(
+                            itemCount: controller.studentModelList.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                            itemBuilder: (context, index) {
+                              final studentModel =
+                                  controller.studentModelList[index];
+                              return StudentGridItem(
+                                  studentModel: studentModel);
+                            });
                   });
                 }
               },
@@ -74,7 +87,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 47, 47, 50),
         onPressed: () {
           Get.toNamed('/addStudent');
-          log('Data in the list ${controller.studentModelList.length}' );
+          log('Data in the list ${controller.studentModelList.length}');
         },
         child: const Icon(
           Icons.add,
@@ -85,34 +98,14 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class ListTileWidget extends StatelessWidget {
   final StudentModel studentModel;
- 
-  final int index;
+  final StudentDataCntrl controller;
 
   const ListTileWidget({
     Key? key,
     required this.studentModel,
-    required this.index,
-    
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -122,7 +115,7 @@ class ListTileWidget extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: doNothing(),
+            onPressed: (context) => controller.delete(studentModel.id!),
             backgroundColor: const Color.fromARGB(255, 244, 69, 69),
             foregroundColor: Colors.white,
             icon: Icons.delete,
@@ -138,7 +131,7 @@ class ListTileWidget extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: doNothing(),
+            onPressed: deleteData(),
             backgroundColor: const Color.fromARGB(255, 1, 213, 75),
             foregroundColor: const Color.fromARGB(255, 0, 0, 0),
             icon: Icons.edit_document,
@@ -150,23 +143,18 @@ class ListTileWidget extends StatelessWidget {
           ),
         ],
       ),
-      child: StudentCard(studentModel: studentModel),
+      child: StudentListCard(studentModel: studentModel),
     );
   }
+
+  deleteData() {}
 }
 
-removeData(BuildContext context, int index) {
-  // studentModelList.removeAt(index);
-}
-
-doNothing() {}
-
-class StudentCard extends StatelessWidget {
+class StudentListCard extends StatelessWidget {
   final StudentModel studentModel;
-  const StudentCard({
+  const StudentListCard({
     super.key,
     required this.studentModel,
-   
   });
 
   @override
@@ -175,7 +163,13 @@ class StudentCard extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Get.to(ViewStudentDataScrn(studentModel: studentModel,));
+          Get.to(
+            ViewStudentDataScrn(
+              studentModel: studentModel,
+            ),
+          transition:  Transition.leftToRightWithFade,
+          duration: const Duration(milliseconds: 400),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
@@ -201,6 +195,65 @@ class StudentCard extends StatelessWidget {
                   InfoWidget(
                     text: studentModel.className,
                     fontSize: 20,
+                    padding: 10,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StudentGridItem extends StatelessWidget {
+  final StudentModel studentModel;
+
+  const StudentGridItem({
+    Key? key,
+    required this.studentModel,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: GestureDetector(
+        onTap: () {
+          Get.to(
+            ViewStudentDataScrn(
+              studentModel: studentModel,
+            ),
+          transition:  Transition.leftToRightWithFade,
+          duration: const Duration(milliseconds: 400),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF1C1C1E),
+            border: Border.all(
+              color: Colors.black,
+              width: 2.0,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          height: double.infinity,
+          width: double.infinity,
+          child: Row(
+            children: [
+              const SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InfoWidget(
+                    text: studentModel.name,
+                    fontSize: 20,
+                    padding: 10,
+                  ),
+                  InfoWidget(
+                    text: studentModel.className,
+                    fontSize: 17,
                     padding: 10,
                   ),
                 ],

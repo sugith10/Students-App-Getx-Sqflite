@@ -1,7 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:student_app/controller/db_controller/student_db_controller/data_list.dart';
 import 'package:student_app/controller/db_controller/student_db_controller/student_db_controller.dart';
 import 'package:student_app/model/db_student_model.dart';
 import 'package:student_app/view/screen/add_screen/widget/inputfield_widget.dart';
@@ -15,8 +15,8 @@ class AddStudentScreen extends StatelessWidget {
     this.isEdit = false,
     this.studentModel,
     super.key,
-  }){
-     if (isEdit && studentModel != null) {
+  }) {
+    if (isEdit && studentModel != null) {
       studentName.text = studentModel!.name;
       studentClass.text = studentModel!.className;
       studentGuardian.text = studentModel!.father;
@@ -37,8 +37,6 @@ class AddStudentScreen extends StatelessWidget {
   File? image25;
 
   String? imagepath;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -112,20 +110,32 @@ class AddStudentScreen extends StatelessWidget {
             ),
             // Spacer(),
             SubmitButton(onTap: () {
-              print('insert function started');
+              log('insert function started');
 
               String photo = 'nothing';
 
-              // studentDataListController.addData(
-              //     studentName.text,
-              //     studentClass.text,
-              //     studentGuardian.text,
-              //     studentMobile.text,
-              //     photo);
+              if (!isEdit) {
+                studentDataCntrl.post(StudentModel(
+                    name: studentName.text,
+                    className: studentClass.text,
+                    father: studentGuardian.text,
+                    pNumber: studentMobile.text,
+                    imagex: photo));
+              } else {
+                log('edit data');
+                // final studentEditController = Get.find<StudentDataCntrl>();
+                studentDataCntrl.editStudent(
+                  id: studentModel!.id!,
+                  studentName: studentName.text, 
+                  studentClass: studentClass.text,
+                  studentFather: studentGuardian.text,
+                  studentPhoneNo: studentMobile.text,
+                  studntPhoto: photo,
+                );
 
-              studentDataCntrl.post(StudentModel(name: studentName.text, 
-              className: studentClass.text, father: studentGuardian.text, pNumber: studentMobile.text, imagex: photo));
-              print('insert function ended');
+                // Get.back();
+              }
+              log('insert function ended');
             }),
             // Spacer()
           ],
